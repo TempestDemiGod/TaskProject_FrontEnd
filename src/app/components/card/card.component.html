@@ -1,0 +1,26 @@
+<div class="block bg-gray-800 rounded-md p-4 w-full">
+    <h1 *ngIf="all == true" class="text-gray-400 text-center font-bold text-xl mb-8"> {{nameCurse}}</h1>
+    <div *ngIf="curso">
+        <h1 class="text-white font-bold ">
+            {{item.nameCourse}}
+        </h1>
+    </div>
+    <div *ngIf="!curso">
+        <h1 class="text-white">
+            <span class="font-bold">Titulo : </span> {{item.title}}
+        </h1>
+        <h1 *ngIf="topic" class="text-white mt-2">
+            <span class="font-bold ">Tema :  </span> {{item.topic}}
+        </h1>
+    </div>
+    <div *ngIf="curso" class="mt-4 p-2 bg-gray-700 rounded-md h-28 overflow-hidden">
+        <p class="text-white ">
+            {{item.contextCourse}}
+        </p>
+    </div>
+    <div *ngIf="!curso" class="mt-4 p-2 bg-gray-700 rounded-md overflow-hidden">
+        <p class="text-white">
+            {{item.constext}}
+        </p>
+    </div>
+</div>
