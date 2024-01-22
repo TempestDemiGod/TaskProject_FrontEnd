@@ -1,0 +1,75 @@
+<div *ngIf="loading">
+    <app-loading></app-loading>
+</div>
+
+<div *ngIf="modal"
+    class="fixed w-full top-0 left-0 min-h-[calc(100vh)] bg-gray-950/30 flex justify-center items-center">
+    <div (click)="modalActivate()" class="fixed w-full top-0 left-0 min-h-[calc(100vh)]"></div>
+    <div
+        class="z-10   rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 border-gray-700 w-10/12">
+        <header class="flex justify-between pt-4">
+            <h1 class="ms-6 text-xl font-bold leading-tight tracking-tight  md:text-2xl text-white">
+                Agregar Curso
+            </h1>
+            <button (click)="modalActivate()" type="button" class="  border  focus:outline-none  focus:ring-4  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-gray-800 text-white border-gray-600 hover:bg-gray-700 hover:border-gray-600 focus:ring-gray-700 cursor-pointer">X</button>
+        </header>
+        <div class=" p-6 space-y-4 md:space-y-6 sm:p-8 sm:pt-4">
+            <form [formGroup]="CourseForm" class="space-y-4 md:space-y-6" (submit)="Submit()">
+                <div>
+                    <label for="nameCourse" class="block mb-2 text-sm font-medium  text-white">nombre del curso</label>
+                    <input type="text" name="nameCourse" id="nameCourse"
+                        class=" border  sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Matematicas" formControlName="nameCourse">
+                    <div *ngIf="CourseForm.controls.nameCourse.touched && CourseForm.controls.nameCourse.errors" class="bg-red-400 my-2 p-2 text-white rounded-md">
+                        <div *ngIf="CourseForm.controls.nameCourse.errors['required']">
+                            Nombre del Curso es requerido
+                        </div>
+                        <div *ngIf="CourseForm.controls.nameCourse.errors['minlength']">
+                            Nombre debe tener 4 caracteres min
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label for="contextCourse"
+                        class="block mb-2 text-sm font-medium text-white">Contexto</label>
+                    <input type="text" name="contextCourse" id="contextCourse" placeholder="El curso es sobre calculo y operaciones algebraicas ...."
+                        class=" border  sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                        formControlName="contextCourse">
+                        <div *ngIf="CourseForm.controls.contextCourse.touched && CourseForm.controls.contextCourse.errors" class="bg-red-400 my-2 p-2 text-white rounded-md">
+                            <div *ngIf="CourseForm.controls.contextCourse.errors['required']">
+                                Contexto del Curso es requerido
+                            </div>
+                        </div>
+                </div>
+
+                <button type="submit" [ngClass]="{'bg-gray-900': CourseForm.invalid != true , 'bg-gray-700': CourseForm.invalid == true}"
+            class=" bg-gray-700 border  focus:outline-none  focus:ring-4  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2  text-white border-gray-600 hover:bg-gray-700 hover:border-gray-600 focus:ring-gray-700  ">Agregar
+            Curso</button>
+                <!-- <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                        No tienes cuenta aun? <a href="#" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Registrarse</a>
+                    </p> -->
+            </form>
+        </div>
+    </div>
+</div>
+<div class="w-full  min-h-[calc(100vh-128px)]">
+    <section class="flex justify-around mx-4 mt-8 items-center">
+        <h1 class=" text-white text-3xl font-bold py-4">
+            CURSOS DEL USUARIO
+        </h1>
+        <button (click)="modalActivate()" type="button"
+            class="  border  focus:outline-none  focus:ring-4  font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-gray-800 text-white border-gray-600 hover:bg-gray-700 hover:border-gray-600 focus:ring-gray-700">Agregar
+            Curso</button>
+    </section>
+    <div class="h-1 bg-gray-600 my-4 rounded-md"></div>
+    <div *ngIf="this.course.length == 0" class="h-[calc(60vh)] flex items-center justify-center">
+        <h2 class="text-ms md:text-4xl font-bold text-gray-600">No hay cursos Registrados</h2>
+    </div>
+    <div *ngIf="this.course.length !== 0" class="flex justify-center">
+        <div class=" w-full grid grid-cols-1 px-4 gap-4 sm:grid-cols-3 sm:w-10/12">
+            <a *ngFor=" let item of course; index as index" [routerLink]="['course/'+course[index]._id]+'/'+course[index].nameCourse">
+                <app-card [item]="course[index]" [curso]="true"></app-card>
+            </a>
+        </div>
+    </div>
+</div>

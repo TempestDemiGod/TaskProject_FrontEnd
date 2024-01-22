@@ -1,0 +1,21 @@
+<div *ngIf="loading">
+    <app-loading></app-loading>
+</div>
+<div class="w-full  min-h-[calc(100vh-128px)]">
+    <section class="flex justify-around mx-4 mt-8 items-center">
+        <h1 class=" text-white text-3xl font-bold py-4">
+            TODAS LAS TAREAS DEL USUARIO
+        </h1>
+    </section>
+    <div class="h-1 bg-gray-600 my-4 rounded-md"></div>
+    <div *ngIf="this.tasks.length == 0" class="h-[calc(60vh)] flex items-center justify-center">
+        <h2 class="text-ms md:text-4xl font-bold text-gray-600">No hay Tareas Registradas</h2>
+    </div>
+    <div *ngIf="this.tasks.length !== 0" class="flex justify-center">
+        <div class=" w-full grid grid-cols-1 px-4 gap-4 sm:grid-cols-3 sm:w-10/12">
+            <a *ngFor=" let item of tasks; index as index">
+                <app-card [item]="tasks[index]" [curso]="false" [all]="true"></app-card>
+            </a>
+        </div>
+    </div>
+</div>
