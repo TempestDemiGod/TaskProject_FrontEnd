@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { timeout } from 'rxjs';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service'
+// import axios from 'axios';
 
 @Component({
   selector: 'app-sign-in-page',
@@ -28,7 +29,16 @@ export class SignInPageComponent implements OnInit{
   errors:any = []
   auth = async() => {
     try {
-      console.log(this.useForm)
+    //   console.log(this.useForm)
+    //   let user = await axios.post('https://honey-organized-deer.glitch.me/api/signin',{
+    //     "email": "tempest@gmail.com",
+    //     "password": "tempest1234"
+    // },{
+    //     withCredentials: true
+    //   })
+    // console.log('document.cookie')
+    // console.log(document.cookie)
+      
       let user = await axios.post('/signin',this.useForm.value)
       this.router.navigate(["/"])
       
@@ -45,6 +55,13 @@ export class SignInPageComponent implements OnInit{
     }
   }
   
+testToken = async() =>{
+  const lafe = await axios.get('/laFe')
+  this.router.navigate(["/"])
+  console.log('lafeeee')
+  console.log(lafe)
+}
+
   Register = async() => {
     try {
       console.log(this.RegisterForm)
@@ -77,7 +94,9 @@ export class SignInPageComponent implements OnInit{
     }
     
   }
+
   
   ngOnInit(): void {
+
   }
 }

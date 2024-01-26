@@ -13,7 +13,8 @@ const routes: Routes = [
   {path: '' , redirectTo: 'home' , pathMatch: 'full'},
   {path: 'login',canActivate: [loginGuard] , component: SignInPageComponent},
   // , , canActivate: [loginGuard]
-  {path: 'home', canActivate: [authGuard] , component: HomePageComponent, children: [
+  //canActivate: [authGuard] ,
+  {path: 'home',  component: HomePageComponent, children: [
     {path: '' , component: CursosComponent },
     {path: 'all-Tasks' , component: TareasComponent },
     {path: 'course/:id/:name' , component: TareasCursoComponent },
