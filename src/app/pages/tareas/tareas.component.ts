@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import axios from '../../utils/axios';
-
+import { CookieService } from 'ngx-cookie-service'
 @Component({
   selector: 'app-tareas',
   templateUrl: './tareas.component.html',
@@ -16,20 +16,33 @@ export class TareasComponent implements OnInit{
     contextCourse: new FormControl('', [Validators.required])
   })
  
+
+  constructor(private cookie: CookieService){}
+
   modalActivate(){
     this.modal = !this.modal
   }
   
   
   addCourse = async() =>{
-    const newtasks = await axios.post('/course', this.tasksForm.value)
+    const cookie = this.cookie.get('token')
+    const newtasks = await axios.post('/course', this.tasksForm.value,{
+      headers:{
+        token: cookie
+      }
+    })
     this.modalActivate()
     this.allTasks()
   }
 
   async allTasks(){
     try {
-      const allCourses = await axios.get('/tasks')
+      const cookie = this.cookie.get('token')
+      const allCourses = await axios.get('/tasks',{
+        headers:{
+          token: cookie
+        }
+      })
       this.tasks = allCourses.data
       this.loading= false
     } catch (error) {
@@ -45,7 +58,7 @@ export class TareasComponent implements OnInit{
     }
     
   }
-  constructor(){}
+  
 
   ngOnInit(): void {
     this.allTasks()

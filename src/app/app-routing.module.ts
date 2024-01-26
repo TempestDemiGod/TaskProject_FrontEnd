@@ -14,7 +14,7 @@ const routes: Routes = [
   {path: 'login',canActivate: [loginGuard] , component: SignInPageComponent},
   // , , canActivate: [loginGuard]
   //canActivate: [authGuard] ,
-  {path: 'home',  component: HomePageComponent, children: [
+  {path: 'home', canActivate: [authGuard] , component: HomePageComponent, children: [
     {path: '' , component: CursosComponent },
     {path: 'all-Tasks' , component: TareasComponent },
     {path: 'course/:id/:name' , component: TareasCursoComponent },

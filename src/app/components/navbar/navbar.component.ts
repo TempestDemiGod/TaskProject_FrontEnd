@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import axios from '../../utils/axios';
 import { ActivatedRoute , Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service'
 
 @Component({
   selector: 'app-navbar',
@@ -10,7 +11,7 @@ import { ActivatedRoute , Router } from '@angular/router';
 
 
 export class NavbarComponent {
-  constructor(private router: Router){}
+  constructor(private router: Router , private cookie: CookieService){}
   step: string ='step1'
   auth: boolean = false
   menu: boolean = false
@@ -23,7 +24,11 @@ export class NavbarComponent {
   }
   logout(){
     axios.get('/logout')
+    const token = this.cookie.get('token')
+    console.log(token)
+    document.cookie = `token=${token}; expires=${new Date(0).toUTCString()};`;
+    // document.cookie = `${token}; expires=${new Date(0).toUTCString()};`;
     this.router.navigate(['login'])
   }
-
+  
 }

@@ -29,17 +29,16 @@ export class SignInPageComponent implements OnInit{
   errors:any = []
   auth = async() => {
     try {
-    //   console.log(this.useForm)
-    //   let user = await axios.post('https://honey-organized-deer.glitch.me/api/signin',{
-    //     "email": "tempest@gmail.com",
-    //     "password": "tempest1234"
-    // },{
-    //     withCredentials: true
-    //   })
-    // console.log('document.cookie')
-    // console.log(document.cookie)
-      
-      let user = await axios.post('/signin',this.useForm.value)
+      let user = await axios.post('/signin',this.useForm.value).then(res=>{
+        console.log('res')
+    console.log(res)
+    const token = res.data.token;
+    console.log(token)
+    const now = new Date();
+    const expires = new Date(now.getTime() + 10 * 60 * 1000);
+
+    document.cookie = `token=${token}; expires=${expires.toUTCString()};`;
+      })
       this.router.navigate(["/"])
       
       const cookie = this.cookie.get('token')
@@ -55,17 +54,20 @@ export class SignInPageComponent implements OnInit{
     }
   }
   
-testToken = async() =>{
-  const lafe = await axios.get('/laFe')
-  this.router.navigate(["/"])
-  console.log('lafeeee')
-  console.log(lafe)
-}
 
   Register = async() => {
     try {
       console.log(this.RegisterForm)
-      let user = await axios.post('/signup',this.RegisterForm.value)
+      let user = await axios.post('/signup',this.RegisterForm.value).then(res=>{
+        console.log('res')
+    console.log(res)
+    const token = res.data.data.token;
+    console.log(token)
+    const now = new Date();
+    const expires = new Date(now.getTime() + 10 * 60 * 1000);
+
+    document.cookie = `token=${token}; expires=${expires.toUTCString()};`;
+      })
       this.router.navigate(["/"])
     } catch (error) {
       let e:any = error

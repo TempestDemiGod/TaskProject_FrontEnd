@@ -9,9 +9,13 @@ import { Observable, of } from 'rxjs';
 export class AuthService {
 
   constructor(private cookie: CookieService) { }
-  async validator(){
+  async validator(cookie:any){
     try {
-      const allCourses = await axios.get('/token')
+      const allCourses = await axios.get('/token',{
+        headers:{
+          token: cookie
+        }
+      })
       return true
     } catch (error:any) {
       return false
@@ -20,12 +24,13 @@ export class AuthService {
   
   getAuthToken(): Observable<boolean>{
     const cookie = this.cookie.get('token')
+    console.log(cookie)
     let resToken
     if(cookie.length == 0){
       return of(false)
     }
     
-    this.validator().then(res =>{
+    this.validator(cookie).then(res =>{
         resToken = res
     })
     if(resToken == false){

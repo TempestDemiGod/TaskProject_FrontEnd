@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import axios from '../../utils/axios';
 import { FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute , Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service'
 
 @Component({
   selector: 'app-tareas-curso',
@@ -13,10 +14,10 @@ export class TareasCursoComponent implements OnInit{
   context: string= 'lorem sadalksdmls kasmdlasm salkdmlas'
  
   
-  async getTasks(){
-    const listTasks = await axios.get('/course/665aa146ce505bf6eb7a49093')
-    console.log(listTasks)
-  }
+  // async getTasks(){
+  //   const listTasks = await axios.get('/course/665aa146ce505bf6eb7a49093')
+  //   console.log(listTasks)
+  // }
   editMode: boolean= false
   modal: boolean = false
   newErrors: boolean = true
@@ -39,10 +40,15 @@ export class TareasCursoComponent implements OnInit{
   
   addTask = async() =>{
     try {
+      const cookie = this.cookie.get('token')
       const newTask = await axios.post('/tasks', {
         title: this.CourseForm.value.nameCourse,
         constext: this.CourseForm.value.contextCourse, 
         course: this.id
+      },{
+        headers:{
+          token: cookie
+        }
       })
       this.modalActivate()
       this.allTasks()
@@ -63,7 +69,12 @@ export class TareasCursoComponent implements OnInit{
       this.name = paramMap.get('name')?.toUpperCase();
       
      });
-      const allCourses = await axios.get('/tasks/'+ this.id)
+     const cookie = this.cookie.get('token')
+      const allCourses = await axios.get('/tasks/'+ this.id ,{
+        headers:{
+          token: cookie
+        }
+      })
       this.course = allCourses.data
       this.loading= false
     } catch (error) {
@@ -78,9 +89,14 @@ export class TareasCursoComponent implements OnInit{
   }
   async editTaks(){
     try {
+      const cookie = this.cookie.get('token')
       const editTasks = await axios.put('/task/'+this.idTask,{
         title: this.CourseForm.value.nameCourse,
         constext: this.CourseForm.value.contextCourse
+      } ,{
+        headers:{
+          token: cookie
+        }
       })
       this.allTasks()
       this.modalActivate()
@@ -90,7 +106,12 @@ export class TareasCursoComponent implements OnInit{
   }
   async deleteTask(){
     try {
-      const TaskDelete = await axios.delete('/task/'+this.idTask)
+      const cookie = this.cookie.get('token')
+      const TaskDelete = await axios.delete('/task/'+this.idTask ,{
+        headers:{
+          token: cookie
+        }
+      })
       this.allTasks()
       this.modalActivate()
     } catch (error) {
@@ -116,12 +137,21 @@ export class TareasCursoComponent implements OnInit{
 
   async DeleteCourse(){
     try {
+      const cookie = this.cookie.get('token')
       if(this.course.length > 0){
         for(let i = 0 ; i < this.course.length  ; i++ ){
-          axios.delete('/task/'+this.course[i]._id)
+          axios.delete('/task/'+this.course[i]._id ,{
+            headers:{
+              token: cookie
+            }
+          })
         }
       }
-      axios.delete('/course/'+this.id)
+      axios.delete('/course/'+this.id ,{
+        headers:{
+          token: cookie
+        }
+      })
       this.router.navigate(['/'])
     } catch (error) {
       console.log(error)
@@ -129,7 +159,7 @@ export class TareasCursoComponent implements OnInit{
     
   }
 
-  constructor(private activatedRoute: ActivatedRoute , private router: Router) {}
+  constructor(private activatedRoute: ActivatedRoute , private router: Router, private cookie: CookieService) {}
 
   ngOnInit(): void {
     this.allTasks()

@@ -3,14 +3,21 @@ import { CanActivateFn, CanMatchFn } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import axios from '../utils/axios';
+import { CookieService } from 'ngx-cookie-service';
 
 
 export const loginGuard: CanActivateFn = (route, state) => {
   const authServise = inject(AuthService)
   const router = inject(Router)
-  async function validator(){
+  const cookie = inject(CookieService)
+
+  async function validator(cookie:any){
     try {
-      const allCourses = await axios.get('/token')
+      const allCourses = await axios.get('/token',{
+        headers:{
+          token: cookie
+        }
+      })
       router.navigate(['/home'])
       return true
     } catch (error:any) {
@@ -22,7 +29,8 @@ export const loginGuard: CanActivateFn = (route, state) => {
     authRes = res
   })
   if(authRes){
-    validator()
+    const cookieToken = cookie.get('token')
+    validator(cookieToken)
     return true
     
   }else{

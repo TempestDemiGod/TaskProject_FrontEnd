@@ -17,13 +17,22 @@ export class CursosComponent  implements OnInit{
     contextCourse: new FormControl('', [Validators.required])
   })
  
+
+
+  constructor(private cookie: CookieService){}
+
   modalActivate(){
     this.modal = !this.modal
   }
   
   
   addCourse = async() =>{
-    const newCourse = await axios.post('/course', this.CourseForm.value)
+    const cookie = this.cookie.get('token')
+    const newCourse = await axios.post('/course', this.CourseForm.value ,{
+      headers:{
+        token: cookie
+      }
+    })
     this.modalActivate()
     this.allCourses()
     this.CourseForm.controls['nameCourse'].setValue('')
@@ -32,7 +41,12 @@ export class CursosComponent  implements OnInit{
 
   async allCourses(){
     try {
-      const allCourses = await axios.get('/courses')
+      const cookie = this.cookie.get('token')
+      const allCourses = await axios.get('/courses',{
+        headers:{
+          token: cookie
+        }
+      })
       this.course = allCourses.data
       this.loading= false
     } catch (error) {
@@ -50,7 +64,7 @@ export class CursosComponent  implements OnInit{
   }
   
   
-  constructor(private cookie: CookieService){}
+  
 
   ngOnInit(): void {
     this.allCourses()
